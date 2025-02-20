@@ -5,11 +5,12 @@
 
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
-            if (window.location.href !== previousUrl) {
-                console.log('網址變化（DOM）：', window.location.href);
-                previousUrl = window.location.href;
-                // 在這裡執行你的程式碼
-                handler();
+            console.log(window.location.href);
+            if (
+                window.location.href !== previousUrl &&
+                window.location.href.includes('experiences')
+            ) {
+                window.location.reload();
             }
         });
     });
@@ -20,7 +21,6 @@
     handler();
 
     function handler() {
-        console.log('previousUrl');
         console.log('Inject script executed');
         // 獲取當前 URL
         const url = new URL(previousUrl);
@@ -40,11 +40,6 @@
         
         // 取得對應的 experience 資料
         const experienceData = jsonData.experience.experienceById[experienceId]?.data;
-
-        if (jsonData.experience.experienceById[experienceId] === undefined) {
-            // reload
-            window.location.reload();
-        }
 
         if (experienceData && experienceData.sections && Array.isArray(experienceData.sections)) {
             // 使用 starts-with 選擇器來取得 div，其 class 以 "Article-module__article___" 開頭
