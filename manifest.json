@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "GoodJob Unlock",
+    "version": "1.1",
+    "description": "解鎖經驗分享",
+    "permissions": [
+      "activeTab",
+      "scripting"
+    ],
+    "host_permissions": [
+      "https://www.goodjob.life/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://www.goodjob.life/experiences/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
