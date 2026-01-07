@@ -1,43 +1,32 @@
+// 如果已經注入過，先停止前一個輪詢或直接重置
+if (window.hasInjectedExperience) {
+    console.log("Script already injected, re-initializing...");
+}
+window.hasInjectedExperience = true;
 
 (function() {
 
-    let previousUrl = window.location.href;
+    window.checkData = setInterval(() => {
+        const targetElement = document.querySelector('section[class^="Article-module__main___"]');
+        // 確保 __data 存在且 DOM 元素已出現
+        if (typeof __data !== 'undefined' && targetElement) {
+            clearInterval(window.checkData);
+            handler();
+        }
+    }, 100);
 
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            console.log(window.location.href);
-            if (
-                window.location.href !== previousUrl &&
-                window.location.href.includes('experiences')
-            ) {
-                window.location.reload();
-            }
-        });
-    });
-    
-    observer.observe(document.body, { subtree: true, childList: true, attributes: true, characterData: true });
-    
-    // init
-    handler();
+    // 加上 2 秒超時保護
+    setTimeout(() => clearInterval(window.checkData), 2000);
 
     function handler() {
-        console.log('Inject script executed');
         // 獲取當前 URL
-        const url = new URL(previousUrl);
+        const url = new URL(window.location.href);
         // 提取最後一部分作為 ID
         const pathParts = url.pathname.split('/');
         const experienceId = pathParts[pathParts.length - 1];
     
-        console.log('Experience ID:', experienceId);
-    
-        const scripts = document.querySelectorAll('script[charset="UTF-8"]')[2];
-    
-        var jsonData = scripts.textContent.replace('window.__data=', '');
-        
-        jsonData = jsonData.slice(0, -1);
-    
-        jsonData = JSON.parse(jsonData);
-        
+        var jsonData = window.__data;
+
         // 取得對應的 experience 資料
         const experienceData = jsonData.experience.experienceById[experienceId]?.data;
 

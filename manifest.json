@@ -15,7 +15,7 @@
     },
     "content_scripts": [
       {
-        "matches": ["https://www.goodjob.life/experiences/*"],
+        "matches": ["https://www.goodjob.life/*"],
         "js": ["content.js"]
       }
     ]
