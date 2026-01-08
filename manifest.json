@@ -3,6 +3,9 @@
     "name": "GoodJob Unlock",
     "version": "1.4",
     "description": "解鎖經驗分享",
+    "icons": {
+        "128": "icon.png"
+    },
     "permissions": [
       "activeTab",
       "scripting"
