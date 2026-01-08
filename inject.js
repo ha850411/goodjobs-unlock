@@ -1,12 +1,14 @@
-// 如果已經注入過，先停止前一個輪詢或直接重置
-if (window.hasInjectedExperience) {
-    console.log("Script already injected, re-initializing...");
-}
-window.hasInjectedExperience = true;
+// 防止重複注入
+if (!window.hasInjectedExperience) {
+    window.hasInjectedExperience = true;
+    
+    // 清理舊的輪詢（如果有）
+    if (window.checkData) {
+        clearInterval(window.checkData);
+    }
 
-(function() {
-
-    window.checkData = setInterval(() => {
+    (function() {
+        window.checkData = setInterval(() => {
         const targetElement = document.querySelector('section[class^="Article-module__main___"]');
         // 確保 __data 存在且 DOM 元素已出現
         if (typeof __data !== 'undefined' && targetElement) {
@@ -69,4 +71,5 @@ window.hasInjectedExperience = true;
             console.warn('experienceData 或 sections 資料無效');
         }
     }
-})();
+    })();
+}
